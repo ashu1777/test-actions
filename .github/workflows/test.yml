@@ -2,9 +2,12 @@ name: Create Release
 on:
   workflow_dispatch:
 
-jobs:
+jobs: 
   deploy:
     runs-on: ubuntu-latest
+
+    env:
+      TAG: 1.0.2
 
     steps:
       - name: Checkout branch
@@ -16,5 +19,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v1.1
-          release_name: Release v1.1
+          tag_name: v${{ env.TAG }}
+          release_name: Release v${{ env.TAG }}

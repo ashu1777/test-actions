@@ -1,0 +1,12 @@
+on:
+  release:
+    types: [published]
+jobs: 
+  deploy:
+    runs-on: ubuntu-latest
+  steps:
+    - name: cd
+      id: cd
+      run: |
+         echo "Scaling UP"
+    

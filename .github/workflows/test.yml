@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      TAG: 1.0.2
+      TAG: 1.0.3
 
     steps:
       - name: Checkout branch

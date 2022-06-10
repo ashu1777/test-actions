@@ -1,6 +1,9 @@
 name: Create Release
 on:
   workflow_dispatch:
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   deploy:

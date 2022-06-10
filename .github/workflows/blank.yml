@@ -4,9 +4,14 @@ on:
 jobs: 
   deploy:
     runs-on: ubuntu-latest
-  steps:
-    - name: cd
-      id: cd
-      run: |
-         echo "Scaling UP"
-    
+
+    env:
+      TAG: 1.0.1
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+      - name: scale up qa cluster
+        id: scale-up
+        run: |
+           echo "Scaling UP"

@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
   release:
-    types: [released,prereleased,deleted,edited,created,unpublished,published]
+    types: [created]
 jobs: 
   deploy:
     runs-on: ubuntu-latest

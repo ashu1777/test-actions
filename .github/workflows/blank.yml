@@ -22,6 +22,12 @@ jobs:
       - name: hello
         run: |
           yq e ".image.tag=\"v1\"" -i "t.yml"
+      - name: Git commit qa-values file
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Github actions-autocommit-update image tages in values file 
+          push_options: --force
+          file_pattern: 't.yml'
 
           
          

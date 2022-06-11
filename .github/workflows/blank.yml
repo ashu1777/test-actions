@@ -7,13 +7,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      TAG: 1.0.1
-
     steps:
-      - name: Checkout branch
-        uses: actions/checkout@v2
-      - name: scale up qa cluster
-        id: scale-up
+      - name: install yq 
+        id: install-yq
         run: |
-           echo "Scaling UP"
+          wget https://github.com/mikefarah/yq/releases/download/v4.5.0/yq_linux_amd64
+          chmod +x yq_linux_amd64
+          sudo mv yq_linux_amd64 /usr/local/bin/yq
+          yq -V
+      - name: hello
+        run: |
+          yq e ".image.tag=\"v1\"" -i "t.yml"
+         

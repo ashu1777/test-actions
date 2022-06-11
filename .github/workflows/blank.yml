@@ -21,7 +21,7 @@ jobs:
 
       - name: hello
         run: |
-          ls
-          pwd
+          yq e ".image.tag=\"v1\"" -i "t.yml"
+
           
          

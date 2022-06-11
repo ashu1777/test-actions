@@ -1,3 +1,2 @@
-hello
-wrolda
-acd
+image:
+  tag: "hello"

@@ -1,13 +1,16 @@
 name: Create Release
 on:
-  workflow_dispatch:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*'
 
 jobs: 
   deploy:
     runs-on: ubuntu-latest
 
     env:
-      TAG: 4.0.2
+      TAG: ${{ github.ref }} 
 
     steps:
       - name: Checkout branch

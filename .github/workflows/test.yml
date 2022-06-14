@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      TAG: ${{ github.ref }} 
+      TAG: v1.0.${{ github.run_number }}
 
     steps:
       - name: Checkout branch

@@ -19,8 +19,8 @@ jobs:
         
       - name: script
         run: |
-          chmod +x release.sh
-          /bin/bash release.sh
+          chmod +x release
+          /bin/bash release
           
       - name: Create a Release
         id: create_release

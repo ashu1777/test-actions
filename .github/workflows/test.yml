@@ -1,14 +1,14 @@
 name: Create Release
 on:
   workflow_dispatch:
-  inputs:
-    name:
-      type: choice
-      description: select your cluster (prod-in2,prod-us2,prod-eu2)
-      options: 
-      - prod-in2
-      - prod-us2
-      - prod-eu2
+    inputs:
+      name:
+        type: choice
+        description: select your cluster (prod-in2,prod-us2,prod-eu2)
+        options: 
+        - prod-in2
+        - prod-us2
+        - prod-eu2
 
 jobs: 
   deploy:

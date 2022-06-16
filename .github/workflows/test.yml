@@ -26,6 +26,11 @@ jobs:
           x=$(/bin/bash ./script/release -p "patch version" | awk 'END{print}')
           echo $x
           echo "::set-output name=version::$x"
+
+      - name: test
+        if: steps.script.outputs.version == "v1.0.50"
+        run: |
+          echo "hello world"
           
       - name: Create a Release
         id: create_release
@@ -34,5 +39,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ steps.script.outputs.version }}
         with:
-          tag_name: ${{ env.TAG }}
+          tag_name: ${{ env.TAG}}
           release_name: Release ${{ env.TAG }}

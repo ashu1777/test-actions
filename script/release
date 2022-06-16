@@ -7,13 +7,13 @@
 # 4) Push the tag
 
 # Parse command line options.
-while getopts ":majorminorpatchdry" Option
+while getopts ":Mmpd" Option
 do
   case $Option in
-    major ) major=true;;
-    minor ) minor=true;;
-    patch ) patch=true;;
-    dry ) dry=true;;
+    M ) major=true;;
+    m ) minor=true;;
+    p ) patch=true;;
+    d ) dry=true;;
   esac
 done
 

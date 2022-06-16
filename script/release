@@ -70,7 +70,6 @@ fi
 
 if [ ! -z $patch ]
 then
-  ((a[2]++))
   ((a[2]++)) 
 fi
 

@@ -12,6 +12,7 @@ jobs:
 
     env:
       TAG: v1.0.${{ github.run_number }}
+      RELEASE: patch
 
     steps:
       - name: Checkout branch
@@ -20,7 +21,10 @@ jobs:
       - name: script
         run: |
           chmod +x release
-          /bin/bash release
+          if [[ ${{ env.RELEASE }} == "patch" ]]; then
+            x=$(/bin/bash ./script/release -p "patch version" | awk 'END{print}')
+            echo "::set-output name=version::$x"
+          fi
           
       - name: Create a Release
         id: create_release

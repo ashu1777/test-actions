@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      TAG: v1.0.${{ github.run_number }}
+      TAG: ${{ steps.script.outputs.version }}
       RELEASE: patch
 
     steps:
@@ -33,5 +33,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.script.outputs.version }}
-          release_name: Release ${{ steps.script.outputs.version }}
+          tag_name: ${{ env.TAG }}
+          release_name: Release ${{ env.TAG }}

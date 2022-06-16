@@ -1,42 +1,106 @@
-#!/usr/bin/env bash
-set -eo pipefail; [[ $TRACE ]] && set -x
+#!/bin/bash
 
-log-fail() {
-  declare desc="log fail formatter"
-  echo "$@" 1>&2
+# Script to simplify the release flow.
+# 1) Fetch the current release version
+# 2) Increase the version (major, minor, patch)
+# 3) Add a new git tag
+# 4) Push the tag
+
+# Parse command line options.
+while getopts ":Mmpd" Option
+do
+  case $Option in
+    M ) major=true;;
+    m ) minor=true;;
+    p ) patch=true;;
+    d ) dry=true;;
+  esac
+done
+
+shift $(($OPTIND - 1))
+
+# Display usage
+if [ -z $major ] && [ -z $minor ] && [ -z $patch ];
+then
+  echo "usage: $(basename $0) [Mmp] [message]"
+  echo ""
+  echo "  -d Dry run"
+  echo "  -M for a major release"
+  echo "  -m for a minor release"
+  echo "  -p for a patch release"
+  echo ""
+  echo " Example: release -p \"Some fix\""
+  echo " means create a patch release with the message \"Some fix\""
   exit 1
-}
+fi
 
-main() {
-  declare desc="Creates a release for the last created tag on github"
-  local DESCRIPTION REQUEST_BODY SUBJECT TAG_NAME
+# Force to the root of the project
+pushd "$(dirname $0)/../"
 
-  [[ -z "$GITHUB_ACCESS_TOKEN" ]] && log-fail "You must specify a GITHUB_ACCESS_TOKEN environment variable"
-  [[ -z "$GITHUB_ORGANIZATION" ]] && log-fail "You must specify a GITHUB_ORGANIZATION environment variable"
-  [[ -z "$GITHUB_REPOSITORY" ]] && log-fail "You must specify a GITHUB_REPOSITORY environment variable"
+# 1) Fetch the current release version
 
-  TAG_NAME="$(git describe --exact-match --candidates=0)"
+echo "Fetch tags"
+git fetch --prune --tags
 
-  if [[ $? -ne 0 ]]; then
-    echo "You must create an annotated tag for this commit with 'git tag -a <tagname>'"
-    exit 1
-  fi
+version=$(git describe --abbrev=0 --tags)
+version=${version:1} # Remove the v in the tag v0.37.10 for example
 
-  echo "Found tag: ${TAG_NAME}"
+echo "Current version: $version"
 
-  SUBJECT="$(git tag -l -n1 --format="%(contents:subject)" ${TAG_NAME})"
-  DESCRIPTION="$(git tag -l -n1 --format="%(contents:body)" ${TAG_NAME} )"
+# 2) Increase version number
 
-  echo "Release name: ${SUBJECT}"
-  echo "Release description: ${DESCRIPTION}"
+# Build array from version string.
 
+a=( ${version//./ } )
 
-  REQUEST_BODY="$(jq -n --arg tag_name "$TAG_NAME" --arg subject "${SUBJECT}" --arg description "${DESCRIPTION}" \
-   '{"tag_name": $tag_name, "target_commitish": "master", "name": $subject, "body": $description, "draft": false, "prerelease": false} ')"
+# Increment version numbers as requested.
 
-  echo "$REQUEST_BODY"
+if [ ! -z $major ]
+then
+  ((a[0]++))
+  a[1]=0
+  a[2]=0
+fi
 
-  curl --data "${REQUEST_BODY}" "https://api.github.com/repos/${GITHUB_ORGANIZATION}/${GITHUB_REPOSITORY}/releases?access_token=${GITHUB_ACCESS_TOKEN}"
-}
+if [ ! -z $minor ]
+then
+  ((a[1]++))
+  a[2]=0
+fi
 
-main "$@"
+if [ ! -z $patch ]
+then
+  ((a[2]++))
+fi
+
+next_version="${a[0]}.${a[1]}.${a[2]}"
+
+username=$(git config user.name)
+msg="$1 by $username"
+
+# If its a dry run, just display the new release version number
+if [ ! -z $dry ]
+then
+  echo "Tag message: $msg"
+  echo "Next version: v$next_version"
+else
+  # If a command fails, exit the script
+  set -e
+
+  # Push master
+  git push origin master
+
+  # If it's not a dry run, let's go!
+  # 3) Add git tag
+  echo "Add git tag v$next_version with message: $msg"
+  git tag -a "v$next_version" -m "$msg"
+
+  # 4) Push the new tag
+
+  echo "Push the tag"
+  git push --tags origin master
+
+  echo -e "\e[32mRelease done: $next_version\e[0m"
+fi
+
+popd

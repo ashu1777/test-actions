@@ -76,4 +76,4 @@ fi
 
 next_version="${a[0]}.${a[1]}.${a[2]}"
 
-echo $next_version
+echo "TAG=$next_version" >> GITHUB_ENV

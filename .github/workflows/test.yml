@@ -13,31 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      TAG: v1.0.${{ github.run_number }}
       RELEASE: patch
 
     steps:
       - name: Checkout branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch_depth: 0
         
       - name: script
         id: script
         run: |
-          x=$(/bin/bash ./script/release -p "patch version" | awk 'END{print}')
-          echo $x
-          echo "::set-output name=version::$x"
-
-      - name: test
-        if: steps.script.outputs.version == 'v1.0.50'
-        run: |
-          echo "hello world"
+          /bin/bash ./script/release -p "patch version" 
           
       - name: Create a Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          version: ${{ steps.script.outputs.version }}
         with:
 
           tag_name: ${{ env.TAG}}

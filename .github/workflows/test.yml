@@ -26,7 +26,6 @@ jobs:
             x=$(/bin/bash ./script/release -p "patch version" | awk 'END{print}')
             echo "::set-output name=version::$x"
           fi
-          echo "$x"
           
       - name: Create a Release
         id: create_release
@@ -34,5 +33,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.TAG }}-${{ steps.script.outputs.version }}
-          release_name: Release ${{ env.TAG }}-${{ steps.script.outputs.version }}
+          tag_name: ${{ steps.script.outputs.version }}
+          release_name: Release ${{ steps.script.outputs.version }}

@@ -2,6 +2,8 @@ name: Create Release
 on:
   workflow_dispatch:
   push:
+    branches:
+      - "master"
     # Sequence of patterns matched against refs/tags
     tags:
       - 'v*'
@@ -33,5 +35,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ steps.script.outputs.version }}
         with:
-          tag_name: ${{ env.version }}
-          release_name: Release ${{ env.version }}
+          tag_name: ${{ env.TAG }}
+          release_name: Release ${{ env.TAG }}

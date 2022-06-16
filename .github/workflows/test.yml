@@ -25,6 +25,7 @@ jobs:
             x=$(/bin/bash ./script/release -p "patch version" | awk 'END{print}')
             echo "::set-output name=version::$x"
           fi
+          echo "$x"
           
       - name: Create a Release
         id: create_release

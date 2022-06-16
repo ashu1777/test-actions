@@ -2,8 +2,6 @@ name: Create Release
 on:
   workflow_dispatch:
   push:
-    branches:
-      - 'main'
     # Sequence of patterns matched against refs/tags
     tags:
       - 'v*'
@@ -18,7 +16,12 @@ jobs:
     steps:
       - name: Checkout branch
         uses: actions/checkout@v2
-
+        
+      - name: script
+        run: |
+          chmod +x release.sh
+          /bin/bash release.sh
+          
       - name: Create a Release
         id: create_release
         uses: actions/create-release@v1

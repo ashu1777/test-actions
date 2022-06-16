@@ -12,27 +12,21 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      RELEASE: patch
-
     steps:
       - name: Checkout branch
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-        
       - name: script
         id: script
         run: |
-          /bin/bash ./script/release -p "patch version" 
-          
+          /bin/bash ./script/release -p "patch version"
       - name: Create a Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-
           tag_name: ${{ env.TAG}}
           release_name: Release ${{ env.TAG }}
 

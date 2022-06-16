@@ -28,7 +28,7 @@ jobs:
           echo "::set-output name=version::$x"
 
       - name: test
-        if: steps.script.outputs.version == "v1.0.50"
+        if: steps.script.outputs.version == 'v1.0.50'
         run: |
           echo "hello world"
           

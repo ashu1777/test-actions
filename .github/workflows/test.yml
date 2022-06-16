@@ -1,12 +1,14 @@
 name: Create Release
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "master"
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - 'v*'
+  inputs:
+      name:
+        type: choice
+        description: select your cluster (prod-in2,prod-us2,prod-eu2)
+        options: 
+        - prod-in2
+        - prod-us2
+        - prod-eu2
 
 jobs: 
   deploy:
@@ -17,17 +19,29 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: script
-        id: script
-        run: |
-          /bin/bash ./script/release -patch "patch version"
-      - name: Create a Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAG}}
-          release_name: Release ${{ env.TAG }}
+      
+      - name:
+      run: |
+        if [[  ${{ github.event.inputs.name }}  == "prod-in2" ]]; then
+          echo "GCP_REGION=asia-south1" >> $GITHUB_ENV
+        elif [[  ${{ github.event.inputs.name }}  == "prod-us2" ]]; then
+          echo "GCP_REGION=us-east1" >> $GITHUB_ENV
+        elif [[  ${{ github.event.inputs.name }}  == "prod-eu2" ]]; then
+          echo "GCP_REGION=europe-west3" >> $GITHUB_ENV
+        fi
+        echo $GCP_REGION
+
+      # - name: script
+      #   id: script
+      #   run: |
+      #     /bin/bash ./script/release -patch "patch version"
+      # - name: Create a Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ env.TAG}}
+      #     release_name: Release ${{ env.TAG }}
 
 

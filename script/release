@@ -10,10 +10,10 @@
 while getopts ":Mmpd" Option
 do
   case $Option in
-    M ) major=true;;
-    m ) minor=true;;
-    p ) patch=true;;
-    d ) dry=true;;
+    major ) major=true;;
+    minor ) minor=true;;
+    patch ) patch=true;;
+    dry ) dry=true;;
   esac
 done
 
@@ -24,10 +24,10 @@ if [ -z $major ] && [ -z $minor ] && [ -z $patch ];
 then
   echo "usage: $(basename $0) [Mmp] [message]"
   echo ""
-  echo "  -d Dry run"
-  echo "  -M for a major release"
-  echo "  -m for a minor release"
-  echo "  -p for a patch release"
+  echo "  -dry Dry run"
+  echo "  -major for a major release"
+  echo "  -minor for a minor release"
+  echo "  -patch for a patch release"
   echo ""
   echo " Example: release -p \"Some fix\""
   echo " means create a patch release with the message \"Some fix\""

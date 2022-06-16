@@ -10,10 +10,10 @@
 while getopts ":majorminorpatchdry" Option
 do
   case $Option in
-    "major" ) major=true;;
-    "minor" ) minor=true;;
-    "patch" ) patch=true;;
-    "dry" ) dry=true;;
+    major ) major=true;;
+    minor ) minor=true;;
+    patch ) patch=true;;
+    dry ) dry=true;;
   esac
 done
 

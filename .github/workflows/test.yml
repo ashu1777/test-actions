@@ -39,5 +39,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ steps.script.outputs.version }}
         with:
+<<<<<<< HEAD
           tag_name: ${{ env.TAG}}
           release_name: Release ${{ env.TAG }}
+=======
+          

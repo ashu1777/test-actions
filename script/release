@@ -7,7 +7,7 @@
 # 4) Push the tag
 
 # Parse command line options.
-while getopts ":Mmpd" Option
+while getopts ":majorminorpatchdry" Option
 do
   case $Option in
     "major" ) major=true;;
